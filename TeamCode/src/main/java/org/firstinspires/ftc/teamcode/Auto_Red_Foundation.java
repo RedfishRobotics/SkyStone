@@ -34,9 +34,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -45,12 +43,10 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -81,8 +77,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 @Autonomous(name="Auto_Red_Foundation", group="Iterative Opmode")
-//@Disabled
-public class Auto_Red extends LinearOpMode {
+@Disabled
+public class Auto_Red_Foundation extends LinearOpMode {
 
     // Declare OpMode members.
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -98,14 +94,10 @@ public class Auto_Red extends LinearOpMode {
     private DcMotor leftRearDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightRearDrive = null;
-    private DcMotor elevatorMotor = null;
 //    private Servo leftSkystoneServo = null;
 //    private Servo rightSkystoneServo = null;
-    private DcMotor rightIntake  = null;
-    private DcMotor leftIntake = null;
     private Servo leftFoundationServo = null;
     private Servo rightFoundationServo = null;
-    private Servo intake_Deployment = null;
     public BNO055IMU imu;
     public OpenGLMatrix lastLocation = null;
 
@@ -179,10 +171,6 @@ public class Auto_Red extends LinearOpMode {
         rightRearDrive = hardwareMap.get(DcMotor.class, "right_rear_drive");
         leftFoundationServo = hardwareMap.get(Servo.class, "left_Foundation_Servo");
         rightFoundationServo = hardwareMap.get(Servo.class, "right_Foundation_Servo");
-        elevatorMotor = hardwareMap.get(DcMotor.class, "Elevator_Motor");
-        leftIntake = hardwareMap.get(DcMotor.class, "left_intake");
-        rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
-        intake_Deployment = hardwareMap.get(Servo.class, "intake_deployment");
 //        sensorRangeRight = hardwareMap.get(DistanceSensor.class, "Range_Right");
 //        sensorRangeLeft = hardwareMap.get(DistanceSensor.class, "Range_Left");
 //        rightColorSensor = hardwareMap.get(ColorSensor.class, "Right_Color_Sensor");
@@ -207,11 +195,7 @@ public class Auto_Red extends LinearOpMode {
         leftRearDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightRearDrive.setDirection(DcMotor.Direction.FORWARD);
-        elevatorMotor.setDirection(DcMotor.Direction.FORWARD);
-        leftIntake.setDirection(DcMotor.Direction.REVERSE);
-        rightIntake.setDirection(DcMotor.Direction.FORWARD);
 
-        elevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -425,27 +409,12 @@ public class Auto_Red extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            elevatorMotor.setTargetPosition(500);
-            elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            elevatorMotor.setPower(0.75);
             encoderDriveStraight(0.5, -10, 5, true, -45, false);
-            sleep(500);
-            intake_Deployment.setPosition(0.75);
-            sleep(1000);
-            rightIntake.setPower(-0.15);
-            leftIntake.setPower(-0.15);
-            sleep(500);
-            rightIntake.setPower(0.0);
-            leftIntake.setPower(0.0);
-            intake_Deployment.setPosition(0.4);
             encoderDriveStraight(0.5, -12, 5, true, 0, false);
             sleep(500);
             leftFoundationServo.setPosition(0.535);
             rightFoundationServo.setPosition(0.45);
             sleep(1500);
-            elevatorMotor.setTargetPosition(-750);
-            elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            elevatorMotor.setPower(0.75);
             encoderDriveStraight(0.5, 30, 5, true, -90, false);
             sleep(500);
             encoderDriveStraight(0.5, -30, 5, true, -90, false);
@@ -453,11 +422,14 @@ public class Auto_Red extends LinearOpMode {
             leftFoundationServo.setPosition(0.15);
             rightFoundationServo.setPosition(0.85);
             sleep(1000);
-            gyroTurn(0.5, -115, 0.025);
+            gyroTurn(0.5, -115, 0.11);
             sleep(500);
-            encoderDriveStraight(0.5, 25.5, 5, true, -115, false);
+            encoderDriveStraight(0.5, 27, 5, true, -115, false);
             sleep(500);
-            gyroTurn(0.5, -90, 0.025);
+            gyroTurn(0.5, -90, 0.11);
+            composeTelemetry();
+            telemetry.update();
+            sleep(1000);
             stop();
 
         }

@@ -32,11 +32,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -45,12 +42,10 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -80,9 +75,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto_Red_Foundation", group="Iterative Opmode")
+@Autonomous(name="Auto_Blue_Roll_Forward", group="Iterative Opmode")
 //@Disabled
-public class Auto_Red extends LinearOpMode {
+public class Auto_Blue_Roll_Forward extends LinearOpMode {
 
     // Declare OpMode members.
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -428,8 +423,6 @@ public class Auto_Red extends LinearOpMode {
             elevatorMotor.setTargetPosition(500);
             elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             elevatorMotor.setPower(0.75);
-            encoderDriveStraight(0.5, -10, 5, true, -45, false);
-            sleep(500);
             intake_Deployment.setPosition(0.75);
             sleep(1000);
             rightIntake.setPower(-0.15);
@@ -438,26 +431,12 @@ public class Auto_Red extends LinearOpMode {
             rightIntake.setPower(0.0);
             leftIntake.setPower(0.0);
             intake_Deployment.setPosition(0.4);
-            encoderDriveStraight(0.5, -12, 5, true, 0, false);
             sleep(500);
-            leftFoundationServo.setPosition(0.535);
-            rightFoundationServo.setPosition(0.45);
-            sleep(1500);
             elevatorMotor.setTargetPosition(-750);
             elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             elevatorMotor.setPower(0.75);
-            encoderDriveStraight(0.5, 30, 5, true, -90, false);
-            sleep(500);
-            encoderDriveStraight(0.5, -30, 5, true, -90, false);
-            sleep(1000);
-            leftFoundationServo.setPosition(0.15);
-            rightFoundationServo.setPosition(0.85);
-            sleep(1000);
-            gyroTurn(0.5, -115, 0.025);
-            sleep(500);
-            encoderDriveStraight(0.5, 25.5, 5, true, -115, false);
-            sleep(500);
-            gyroTurn(0.5, -90, 0.025);
+            sleep(20000);
+            encoderDriveStraight(0.5, 18, 5, true, 0, false);
             stop();
 
         }
@@ -468,7 +447,7 @@ public class Auto_Red extends LinearOpMode {
         telemetry.addLine("DM10337- gyroTurn start  speed:" + speed +
                 "  heading:" + angle);
 
-        // keep looping while we are still active, and not on heading.
+        // keep looping while we are still active, and not con heading.
         while (opModeIsActive() && !onHeading(speed, angle, coefficient)) {
             // Allow time for other processes to run.
             // onHeading() does the work of turning us
