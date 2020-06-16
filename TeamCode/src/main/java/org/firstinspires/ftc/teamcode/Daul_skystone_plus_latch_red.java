@@ -47,9 +47,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "daulskystonepluslatch", group="Sky autonomous")
+@Autonomous(name= "daul_skystone_plus_latch_Red", group="Sky autonomous")
 //@Disabled//comment out this line before using
-public class DaulskystonepluslatchTest extends LinearOpMode {
+public class Daul_skystone_plus_latch_red extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     //0 means skystone, 1 means yellow stone
@@ -234,7 +234,7 @@ public class DaulskystonepluslatchTest extends LinearOpMode {
                 rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(500);
-                encoderDriveForwardStraight(0.5, 22, 20,true, 0, false);
+                encoderDriveForwardStraight(0.5, 20, 20,true, 0, false);
                 rightSkystoneServo.setPosition(0.17);
                 sleep(500);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -278,7 +278,7 @@ public class DaulskystonepluslatchTest extends LinearOpMode {
                 rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(750);
-                encoderDriveForwardStraight(0.65, 41, 20, true, 0, false);
+                encoderDriveForwardStraight(0.65, 39, 20, true, 0, false);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -325,12 +325,12 @@ public class DaulskystonepluslatchTest extends LinearOpMode {
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(500);
                 encoderDriveBackwardStraight(0.65, -9, 20, true, 90, false);
-                leftFoundationServo.setPosition(0.535);
-                rightFoundationServo.setPosition(0.45);
+                leftFoundationServo.setPosition(0.15);
+                rightFoundationServo.setPosition(0.86);
                 sleep(1000);
                 encoderDriveForwardStraight(0.85, 24, 20, true, 90, false);
-                leftFoundationServo.setPosition(0.15);
-                rightFoundationServo.setPosition(0.85);
+                leftFoundationServo.setPosition(0.535);
+                rightFoundationServo.setPosition(0.45);
                 sleep(500);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -408,7 +408,7 @@ public class DaulskystonepluslatchTest extends LinearOpMode {
                 rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(750);
-                encoderDriveForwardStraight(0.65, 31, 20, true, 0, false);
+                encoderDriveForwardStraight(0.65, 30, 20, true, 0, false);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -455,12 +455,12 @@ public class DaulskystonepluslatchTest extends LinearOpMode {
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(500);
                 encoderDriveBackwardStraight(0.65, -9, 20, true, 90, false);
-                leftFoundationServo.setPosition(0.535);
-                rightFoundationServo.setPosition(0.45);
+                leftFoundationServo.setPosition(0.15);
+                rightFoundationServo.setPosition(0.86);
                 sleep(1000);
                 encoderDriveForwardStraight(0.85, 24, 20, true, 90, false);
-                leftFoundationServo.setPosition(0.15);
-                rightFoundationServo.setPosition(0.85);
+                leftFoundationServo.setPosition(0.535);
+                rightFoundationServo.setPosition(0.45);
                 sleep(500);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -494,7 +494,7 @@ public class DaulskystonepluslatchTest extends LinearOpMode {
                 rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(500);
-                encoderDriveForwardStraight(0.5, 9, 20,true, 0, false);
+                encoderDriveForwardStraight(0.5, 6, 20,true, 0, false);
                 rightSkystoneServo.setPosition(0.17);
                 sleep(500);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -539,7 +539,7 @@ public class DaulskystonepluslatchTest extends LinearOpMode {
                 rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(750);
-                encoderDriveForwardStraight(0.65, 26, 20, true, 0, false);
+                encoderDriveForwardStraight(0.65, 25.5, 20, true, 0, false);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -586,12 +586,12 @@ public class DaulskystonepluslatchTest extends LinearOpMode {
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(500);
                 encoderDriveBackwardStraight(0.65, -9, 20, true, 90, false);
-                leftFoundationServo.setPosition(0.535);
-                rightFoundationServo.setPosition(0.45);
+                leftFoundationServo.setPosition(0.15);
+                rightFoundationServo.setPosition(0.86);
                 sleep(1000);
                 encoderDriveForwardStraight(0.85, 24, 20, true, 90, false);
-                leftFoundationServo.setPosition(0.15);
-                rightFoundationServo.setPosition(0.85);
+                leftFoundationServo.setPosition(0.535);
+                rightFoundationServo.setPosition(0.45);
                 sleep(500);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);

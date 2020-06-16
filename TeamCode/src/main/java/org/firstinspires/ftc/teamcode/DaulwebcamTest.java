@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -48,7 +49,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  *YES
  */
 @Autonomous(name= "daulwebcamDetector", group="Sky autonomous")
-//@Disabled//comment out this line before using
+@Disabled//comment out this line before using
 public class DaulwebcamTest extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -216,7 +217,7 @@ public class DaulwebcamTest extends LinearOpMode {
         while (opModeIsActive()) {
 //            encoderStrafeLeft(0.5, 6, 6, 5);
             if (valLeft == 0) {
-                encoderStrafeLeft(0.5, 23.5, 23.5, 8);
+                encoderStrafeLeft(0.5, 23, 23, 8);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -232,7 +233,7 @@ public class DaulwebcamTest extends LinearOpMode {
                 sleep(750);
 //                gyroTurn(0.5, 0, 0.025);
 //                sleep(500);
-                encoderDriveStraight(0.4, 20, 20,true, 0, false);
+                encoderDriveForwardStraight(0.5, 22, 20,true, 0, false);
                 rightSkystoneServo.setPosition(0.17);
                 sleep(750);
 //                stop();
@@ -249,7 +250,7 @@ public class DaulwebcamTest extends LinearOpMode {
                 rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(750);
-                encoderStrafeRight(0.5, 8, 8, 3);
+                encoderStrafeRight(0.5, 6, 6, 3);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -263,20 +264,20 @@ public class DaulwebcamTest extends LinearOpMode {
                 rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //                sleep(750);
-                encoderDriveStraight(0.4, -20, 36, true, 0, false);
-                intake_Deployment.setPosition(0.75);
-                sleep(1000);
-                rightIntake.setPower(-0.15);
-                leftIntake.setPower(-0.15);
-                sleep(500);
-                rightIntake.setPower(0.0);
-                leftIntake.setPower(0.0);
-                intake_Deployment.setPosition(0.4);
-                elevatorMotor.setTargetPosition(-850);
-                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                elevatorMotor.setPower(0.75);
-                sleep(750);
-                encoderDriveStraight(0.4, -40, 36, true, 0, false);
+                encoderDriveBackwardStraight(0.5, -60, 36, true, 0, false);
+//                intake_Deployment.setPosition(0.75);
+//                sleep(1000);
+//                rightIntake.setPower(-0.15);
+//                leftIntake.setPower(-0.15);
+//                sleep(500);
+//                rightIntake.setPower(0.0);
+//                leftIntake.setPower(0.0);
+//                intake_Deployment.setPosition(0.4);
+//                elevatorMotor.setTargetPosition(-850);
+//                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                elevatorMotor.setPower(0.75);
+//                sleep(750);
+//                encoderDriveStraight(0.4, -40, 36, true, 0, false);
                 rightSkystoneServo.setPosition(0.6);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -291,7 +292,7 @@ public class DaulwebcamTest extends LinearOpMode {
                 rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(500);
-                encoderDriveStraight(0.4, 42, 20, true, 0, false);
+                encoderDriveForwardStraight(0.5, 43, 20, true, 0, false);
                 sleep(500);
                 leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -306,7 +307,7 @@ public class DaulwebcamTest extends LinearOpMode {
                 rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(750);
-                encoderStrafeLeft(0.5, 8, 8, 3);
+                encoderStrafeLeft(0.5, 6, 6, 3);
                 rightSkystoneServo.setPosition(0.17);
                 sleep(500);
                 encoderStrafeRight(0.5, 6, 6, 3);
@@ -324,13 +325,14 @@ public class DaulwebcamTest extends LinearOpMode {
                 rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(750);
 //                encoderDrive(0.5, 46, 46, 8);
-                encoderDriveStraight(0.4, -40, 20, true, 0, false);
+                encoderDriveBackwardStraight(0.5, -48, 20, true, 0, false);
                 rightSkystoneServo.setPosition(0.6);
                 sleep(500);
 //                encoderDrive(0.5, -16, -16, 8);
-                encoderDriveStraight(0.4, 20, 20, true, 0, false);
+                encoderDriveForwardStraight(0.5, 14, 20, true, 0, false);
                 telemetry.addLine("Left");
                 telemetry.update();
+                stop();
             } //else if(valMid == 0) {
 //                encoderStrafeLeft(0.5, 23.5, 23.5, 8);
 //                leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -927,7 +929,7 @@ public class DaulwebcamTest extends LinearOpMode {
 
             }
         }
-    public void encoderDriveStraight(double speed,
+    public void encoderDriveForwardStraight(double speed,
                                      double distance,
                                      double timeout,
                                      boolean useGyro,
@@ -988,19 +990,19 @@ public class DaulwebcamTest extends LinearOpMode {
 
             while (leftFrontDrive.getTargetPosition() != newLFTarget) {
                 leftFrontDrive.setTargetPosition(newLFTarget);
-                sleep(1);
+//                sleep(1);
             }
             while (rightFrontDrive.getTargetPosition() != newRFTarget) {
                 rightFrontDrive.setTargetPosition(newRFTarget);
-                sleep(1);
+//                sleep(1);
             }
             while (leftRearDrive.getTargetPosition() != newLRTarget) {
                 leftRearDrive.setTargetPosition(newLRTarget);
-                sleep(1);
+//                sleep(1);
             }
             while (rightRearDrive.getTargetPosition() != newRRTarget) {
                 rightRearDrive.setTargetPosition(newRRTarget);
-                sleep(1);
+//                sleep(1);
             }
 
             // Turn On motors to RUN_TO_POSITION
@@ -1024,8 +1026,172 @@ public class DaulwebcamTest extends LinearOpMode {
             // keep looping while we are still active, and there is time left, until at least 1 motor reaches target
             while (opModeIsActive() &&
                     (runtime.seconds() < timeout) &&
-                    leftFrontDrive.isBusy() &&
-                    rightFrontDrive.isBusy()) {
+                    leftFrontDrive.getCurrentPosition() <= newLFTarget &&
+                    rightFrontDrive.getCurrentPosition() <= newRFTarget &&
+                    leftRearDrive.getCurrentPosition() <= newLRTarget &&
+                    rightRearDrive.getCurrentPosition() <= newRRTarget) {
+
+                // Ramp up motor powers as needed
+                if (curSpeed < speed) {
+                    curSpeed += SPEEDINCR;
+                }
+                double leftSpeed = curSpeed;
+                double rightSpeed = curSpeed;
+
+                // Doing gyro heading correction?
+                if (useGyro) {
+
+                    // adjust relative speed based on heading
+                    double error = getError(curHeading);
+
+                    updateGyroErrorAvg(error);
+
+                    double steer = getSteer(error,
+                            (aggressive ? P_DRIVE_COEFF_2 : P_DRIVE_COEFF_1));
+
+                    // if driving in reverse, the motor correction also needs to be reversed
+                    if (distance < 0)
+                        steer *= -1.0;
+
+                    // Adjust motor powers for heading correction
+                    leftSpeed -= steer;
+                    rightSpeed += steer;
+
+                    // Normalize speeds if any one exceeds +/- 1.0;
+                    double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+                    if (max > 1.0) {
+                        leftSpeed /= max;
+                        rightSpeed /= max;
+                    }
+
+                }
+
+                // And rewrite the motor speeds
+                leftFrontDrive.setPower(Math.abs(leftSpeed));
+                rightFrontDrive.setPower(Math.abs(rightSpeed));
+                leftRearDrive.setPower(Math.abs(leftSpeed));
+                rightRearDrive.setPower(Math.abs(rightSpeed));
+
+                // Allow time for other processes to run.
+                sleep(1);
+            }
+
+
+            // Stop all motion;
+            leftFrontDrive.setPower(0);
+            leftRearDrive.setPower(0);
+            rightFrontDrive.setPower(0);
+            rightRearDrive.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        }
+    }
+    public void encoderDriveBackwardStraight(double speed,
+                                            double distance,
+                                            double timeout,
+                                            boolean useGyro,
+                                            double heading,
+                                            boolean aggressive) {
+
+        // Calculated encoder targets
+        int newLFTarget;
+        int newRFTarget;
+        int newLRTarget;
+        int newRRTarget;
+
+        // The potentially adjusted current target heading
+        double curHeading = heading;
+
+        // Speed ramp on start of move to avoid wheel slip
+        final double MINSPEED = 0.30;           // Start at this power
+        final double SPEEDINCR = 0.015;         // And increment by this much each cycle
+        double curSpeed;                        // Keep track of speed as we ramp
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+//            RobotLog.i("DM10337- Starting encoderDrive speed:" + speed +
+//                    "  distance:" + distance + "  timeout:" + timeout +
+//                    "  useGyro:" + useGyro + " heading:" + heading + "  maintainRange: " + maintainRange);
+
+            // Calculate "adjusted" distance  for each side to account for requested turn during run
+            // Purpose of code is to have PIDs closer to finishing even on curved moves
+            // This prevents jerk to one side at stop
+            double leftDistance = distance;
+            double rightDistance = distance;
+            if (useGyro) {
+                // We are gyro steering -- are we requesting a turn while driving?
+                double headingChange = getError(curHeading) * Math.signum(distance);
+                if (Math.abs(headingChange) > 5.0) {
+                    //Heading change is significant enough to account for
+                    if (headingChange > 0.0) {
+                        // Assume 15.25 inch wheelbase
+                        // Add extra distance to the wheel on outside of turn
+                        rightDistance += Math.signum(distance) * 2 * 3.1415 * 15.25 * headingChange / 360.0;
+//                        RobotLog.i("DM10337 -- Turn adjusted R distance:" + rightDistance);
+                    } else {
+                        // Assume 15.25 inch wheelbase
+                        // Add extra distance from the wheel on inside of turn
+                        // headingChange is - so this is increasing the left distance
+                        leftDistance -= Math.signum(distance) * 2 * 3.1415 * 15.25 * headingChange / 360.0;
+//                        RobotLog.i("DM10337 -- Turn adjusted L distance:" + leftDistance);
+                    }
+                }
+            }
+
+            // Determine new target encoder positions, and pass to motor controller
+            newLFTarget = leftFrontDrive.getCurrentPosition() + (int) (leftDistance * COUNTS_PER_INCH);
+            newLRTarget = leftRearDrive.getCurrentPosition() + (int) (leftDistance * COUNTS_PER_INCH);
+            newRFTarget = rightFrontDrive.getCurrentPosition() + (int) (rightDistance * COUNTS_PER_INCH);
+            newRRTarget = rightRearDrive.getCurrentPosition() + (int) (rightDistance * COUNTS_PER_INCH);
+
+            while (leftFrontDrive.getTargetPosition() != newLFTarget) {
+                leftFrontDrive.setTargetPosition(newLFTarget);
+//                sleep(1);
+            }
+            while (rightFrontDrive.getTargetPosition() != newRFTarget) {
+                rightFrontDrive.setTargetPosition(newRFTarget);
+//                sleep(1);
+            }
+            while (leftRearDrive.getTargetPosition() != newLRTarget) {
+                leftRearDrive.setTargetPosition(newLRTarget);
+//                sleep(1);
+            }
+            while (rightRearDrive.getTargetPosition() != newRRTarget) {
+                rightRearDrive.setTargetPosition(newRRTarget);
+//                sleep(1);
+            }
+
+            // Turn On motors to RUN_TO_POSITION
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftRearDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightRearDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+
+            speed = Math.abs(speed);    // Make sure its positive
+            curSpeed = Math.min(MINSPEED, speed);
+
+            // Set the motors to the starting power
+            leftFrontDrive.setPower(Math.abs(curSpeed));
+            rightFrontDrive.setPower(Math.abs(curSpeed));
+            leftRearDrive.setPower(Math.abs(curSpeed));
+            rightRearDrive.setPower(Math.abs(curSpeed));
+
+            // keep looping while we are still active, and there is time left, until at least 1 motor reaches target
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeout) &&
+                    leftFrontDrive.getCurrentPosition() >= newLFTarget &&
+                    rightFrontDrive.getCurrentPosition() >= newRFTarget &&
+                    leftRearDrive.getCurrentPosition() >= newLRTarget &&
+                    rightRearDrive.getCurrentPosition() >= newRRTarget) {
 
                 // Ramp up motor powers as needed
                 if (curSpeed < speed) {
