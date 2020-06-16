@@ -101,10 +101,13 @@ public class Auto_Red extends LinearOpMode {
     private DcMotor elevatorMotor = null;
 //    private Servo leftSkystoneServo = null;
 //    private Servo rightSkystoneServo = null;
+private Servo blockRotationServo = null;
     private DcMotor rightIntake  = null;
     private DcMotor leftIntake = null;
     private Servo leftFoundationServo = null;
     private Servo rightFoundationServo = null;
+    private Servo rightSkystoneServo = null;
+    private Servo leftSkystoneServo = null;
     private Servo intake_Deployment = null;
     public BNO055IMU imu;
     public OpenGLMatrix lastLocation = null;
@@ -182,7 +185,10 @@ public class Auto_Red extends LinearOpMode {
         elevatorMotor = hardwareMap.get(DcMotor.class, "Elevator_Motor");
         leftIntake = hardwareMap.get(DcMotor.class, "left_intake");
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
+        blockRotationServo = hardwareMap.get(Servo.class, "Stone_Rotation_Servo");
         intake_Deployment = hardwareMap.get(Servo.class, "intake_deployment");
+        rightSkystoneServo = hardwareMap.get(Servo.class, "right_Skystone_Servo");
+        leftSkystoneServo = hardwareMap.get(Servo.class, "left_Skystone_Servo");
 //        sensorRangeRight = hardwareMap.get(DistanceSensor.class, "Range_Right");
 //        sensorRangeLeft = hardwareMap.get(DistanceSensor.class, "Range_Left");
 //        rightColorSensor = hardwareMap.get(ColorSensor.class, "Right_Color_Sensor");
@@ -226,6 +232,8 @@ public class Auto_Red extends LinearOpMode {
         leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        blockRotationServo.setPosition(0.875);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -428,34 +436,74 @@ public class Auto_Red extends LinearOpMode {
             elevatorMotor.setTargetPosition(500);
             elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             elevatorMotor.setPower(0.75);
-            encoderDriveStraight(0.5, -10, 5, true, -45, false);
+            encoderDriveBackwardStraight(0.5, -10, 5, true, 0, false);
             sleep(500);
             intake_Deployment.setPosition(0.75);
             sleep(1000);
+            rightSkystoneServo.setPosition(0.17);
+            leftSkystoneServo.setPosition(0.6);
             rightIntake.setPower(-0.15);
             leftIntake.setPower(-0.15);
             sleep(500);
             rightIntake.setPower(0.0);
             leftIntake.setPower(0.0);
+            rightSkystoneServo.setPosition(0.6);
+            leftSkystoneServo.setPosition(0.17);
             intake_Deployment.setPosition(0.4);
-            encoderDriveStraight(0.5, -12, 5, true, 0, false);
+            leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            rightRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             sleep(500);
-            leftFoundationServo.setPosition(0.535);
-            rightFoundationServo.setPosition(0.45);
+            encoderStrafeRight(0.5, 10, 10, 5);
+            sleep(500);
+            leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightRearDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            sleep(600);
+            encoderDriveBackwardStraight(0.5, -12, 5, true, 0, false);
+            sleep(500);
+            leftFoundationServo.setPosition(0.15);
+            rightFoundationServo.setPosition(0.86);
             sleep(1500);
-            elevatorMotor.setTargetPosition(-750);
+            elevatorMotor.setTargetPosition(-500);
             elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             elevatorMotor.setPower(0.75);
-            encoderDriveStraight(0.5, 30, 5, true, -90, false);
-            sleep(500);
-            encoderDriveStraight(0.5, -30, 5, true, -90, false);
+            encoderDriveForwardStraight(0.5, 30, 5, true, -90, false);
+            leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            sleep(600);
+            encoderDriveBackwardStraight(0.5, -19, 3, true, -90, false);
             sleep(1000);
-            leftFoundationServo.setPosition(0.15);
-            rightFoundationServo.setPosition(0.85);
+            leftFoundationServo.setPosition(0.535);
+            rightFoundationServo.setPosition(0.45);
             sleep(1000);
             gyroTurn(0.5, -115, 0.025);
             sleep(500);
-            encoderDriveStraight(0.5, 25.5, 5, true, -115, false);
+            encoderDriveForwardStraight(0.85, 25.5, 5, true, -115, false);
             sleep(500);
             gyroTurn(0.5, -90, 0.025);
             stop();
@@ -657,12 +705,12 @@ public class Auto_Red extends LinearOpMode {
         return angles.firstAngle - headingBias;
     }
 
-    public void encoderDriveStraight(double speed,
-                                     double distance,
-                                     double timeout,
-                                     boolean useGyro,
-                                     double heading,
-                                     boolean aggressive) {
+    public void encoderDriveForwardStraight(double speed,
+                                            double distance,
+                                            double timeout,
+                                            boolean useGyro,
+                                            double heading,
+                                            boolean aggressive) {
 
         // Calculated encoder targets
         int newLFTarget;
@@ -718,19 +766,19 @@ public class Auto_Red extends LinearOpMode {
 
             while (leftFrontDrive.getTargetPosition() != newLFTarget) {
                 leftFrontDrive.setTargetPosition(newLFTarget);
-                sleep(1);
+//                sleep(1);
             }
             while (rightFrontDrive.getTargetPosition() != newRFTarget) {
                 rightFrontDrive.setTargetPosition(newRFTarget);
-                sleep(1);
+//                sleep(1);
             }
             while (leftRearDrive.getTargetPosition() != newLRTarget) {
                 leftRearDrive.setTargetPosition(newLRTarget);
-                sleep(1);
+//                sleep(1);
             }
             while (rightRearDrive.getTargetPosition() != newRRTarget) {
                 rightRearDrive.setTargetPosition(newRRTarget);
-                sleep(1);
+//                sleep(1);
             }
 
             // Turn On motors to RUN_TO_POSITION
@@ -754,10 +802,10 @@ public class Auto_Red extends LinearOpMode {
             // keep looping while we are still active, and there is time left, until at least 1 motor reaches target
             while (opModeIsActive() &&
                     (runtime.seconds() < timeout) &&
-                    leftFrontDrive.isBusy() &&
-                    leftRearDrive.isBusy() &&
-                    rightFrontDrive.isBusy() &&
-                    rightRearDrive.isBusy()) {
+                    leftFrontDrive.getCurrentPosition() <= newLFTarget &&
+                    rightFrontDrive.getCurrentPosition() <= newRFTarget &&
+                    leftRearDrive.getCurrentPosition() <= newLRTarget &&
+                    rightRearDrive.getCurrentPosition() <= newRRTarget) {
 
                 // Ramp up motor powers as needed
                 if (curSpeed < speed) {
@@ -802,7 +850,168 @@ public class Auto_Red extends LinearOpMode {
 
                 // Allow time for other processes to run.
                 sleep(1);
-                ;
+            }
+
+
+            // Stop all motion;
+            leftFrontDrive.setPower(0);
+            leftRearDrive.setPower(0);
+            rightFrontDrive.setPower(0);
+            rightRearDrive.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightRearDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        }
+    }
+    public void encoderDriveBackwardStraight(double speed,
+                                             double distance,
+                                             double timeout,
+                                             boolean useGyro,
+                                             double heading,
+                                             boolean aggressive) {
+
+        // Calculated encoder targets
+        int newLFTarget;
+        int newRFTarget;
+        int newLRTarget;
+        int newRRTarget;
+
+        // The potentially adjusted current target heading
+        double curHeading = heading;
+
+        // Speed ramp on start of move to avoid wheel slip
+        final double MINSPEED = 0.30;           // Start at this power
+        final double SPEEDINCR = 0.015;         // And increment by this much each cycle
+        double curSpeed;                        // Keep track of speed as we ramp
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+//            RobotLog.i("DM10337- Starting encoderDrive speed:" + speed +
+//                    "  distance:" + distance + "  timeout:" + timeout +
+//                    "  useGyro:" + useGyro + " heading:" + heading + "  maintainRange: " + maintainRange);
+
+            // Calculate "adjusted" distance  for each side to account for requested turn during run
+            // Purpose of code is to have PIDs closer to finishing even on curved moves
+            // This prevents jerk to one side at stop
+            double leftDistance = distance;
+            double rightDistance = distance;
+            if (useGyro) {
+                // We are gyro steering -- are we requesting a turn while driving?
+                double headingChange = getError(curHeading) * Math.signum(distance);
+                if (Math.abs(headingChange) > 5.0) {
+                    //Heading change is significant enough to account for
+                    if (headingChange > 0.0) {
+                        // Assume 15.25 inch wheelbase
+                        // Add extra distance to the wheel on outside of turn
+                        rightDistance += Math.signum(distance) * 2 * 3.1415 * 15.25 * headingChange / 360.0;
+//                        RobotLog.i("DM10337 -- Turn adjusted R distance:" + rightDistance);
+                    } else {
+                        // Assume 15.25 inch wheelbase
+                        // Add extra distance from the wheel on inside of turn
+                        // headingChange is - so this is increasing the left distance
+                        leftDistance -= Math.signum(distance) * 2 * 3.1415 * 15.25 * headingChange / 360.0;
+//                        RobotLog.i("DM10337 -- Turn adjusted L distance:" + leftDistance);
+                    }
+                }
+            }
+
+            // Determine new target encoder positions, and pass to motor controller
+            newLFTarget = leftFrontDrive.getCurrentPosition() + (int) (leftDistance * COUNTS_PER_INCH);
+            newLRTarget = leftRearDrive.getCurrentPosition() + (int) (leftDistance * COUNTS_PER_INCH);
+            newRFTarget = rightFrontDrive.getCurrentPosition() + (int) (rightDistance * COUNTS_PER_INCH);
+            newRRTarget = rightRearDrive.getCurrentPosition() + (int) (rightDistance * COUNTS_PER_INCH);
+
+            while (leftFrontDrive.getTargetPosition() != newLFTarget) {
+                leftFrontDrive.setTargetPosition(newLFTarget);
+//                sleep(1);
+            }
+            while (rightFrontDrive.getTargetPosition() != newRFTarget) {
+                rightFrontDrive.setTargetPosition(newRFTarget);
+//                sleep(1);
+            }
+            while (leftRearDrive.getTargetPosition() != newLRTarget) {
+                leftRearDrive.setTargetPosition(newLRTarget);
+//                sleep(1);
+            }
+            while (rightRearDrive.getTargetPosition() != newRRTarget) {
+                rightRearDrive.setTargetPosition(newRRTarget);
+//                sleep(1);
+            }
+
+            // Turn On motors to RUN_TO_POSITION
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftRearDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightRearDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+
+            speed = Math.abs(speed);    // Make sure its positive
+            curSpeed = Math.min(MINSPEED, speed);
+
+            // Set the motors to the starting power
+            leftFrontDrive.setPower(Math.abs(curSpeed));
+            rightFrontDrive.setPower(Math.abs(curSpeed));
+            leftRearDrive.setPower(Math.abs(curSpeed));
+            rightRearDrive.setPower(Math.abs(curSpeed));
+
+            // keep looping while we are still active, and there is time left, until at least 1 motor reaches target
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeout) &&
+                    leftFrontDrive.getCurrentPosition() >= newLFTarget &&
+                    rightFrontDrive.getCurrentPosition() >= newRFTarget &&
+                    leftRearDrive.getCurrentPosition() >= newLRTarget &&
+                    rightRearDrive.getCurrentPosition() >= newRRTarget) {
+
+                // Ramp up motor powers as needed
+                if (curSpeed < speed) {
+                    curSpeed += SPEEDINCR;
+                }
+                double leftSpeed = curSpeed;
+                double rightSpeed = curSpeed;
+
+                // Doing gyro heading correction?
+                if (useGyro) {
+
+                    // adjust relative speed based on heading
+                    double error = getError(curHeading);
+
+                    updateGyroErrorAvg(error);
+
+                    double steer = getSteer(error,
+                            (aggressive ? P_DRIVE_COEFF_2 : P_DRIVE_COEFF_1));
+
+                    // if driving in reverse, the motor correction also needs to be reversed
+                    if (distance < 0)
+                        steer *= -1.0;
+
+                    // Adjust motor powers for heading correction
+                    leftSpeed -= steer;
+                    rightSpeed += steer;
+
+                    // Normalize speeds if any one exceeds +/- 1.0;
+                    double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+                    if (max > 1.0) {
+                        leftSpeed /= max;
+                        rightSpeed /= max;
+                    }
+
+                }
+
+                // And rewrite the motor speeds
+                leftFrontDrive.setPower(Math.abs(leftSpeed));
+                rightFrontDrive.setPower(Math.abs(rightSpeed));
+                leftRearDrive.setPower(Math.abs(leftSpeed));
+                rightRearDrive.setPower(Math.abs(rightSpeed));
+
+                // Allow time for other processes to run.
+                sleep(1);
             }
 
 
@@ -883,9 +1092,9 @@ public class Auto_Red extends LinearOpMode {
         }
     }
 
-    public void encoderStrafeLeft(double speed,
-                                  double leftInches, double rightInches,
-                                  double timeoutS) {
+    public void encoderStrafeLeft ( double speed,
+                                    double leftInches, double rightInches,
+                                    double timeoutS){
         int newLeftTarget;//init the variable newLeftTarget
         int newRightTarget;//init the variable newRightTarget
 
@@ -908,10 +1117,10 @@ public class Auto_Red extends LinearOpMode {
 
             // reset the timeout time and start motion.
             runtime.reset();
-            leftFrontDrive.setPower(speed);
-            leftRearDrive.setPower(speed);
-            rightFrontDrive.setPower(speed);
-            rightRearDrive.setPower(speed);
+            leftFrontDrive.setPower(.75);
+            leftRearDrive.setPower(.7);
+            rightFrontDrive.setPower(.75);
+            rightRearDrive.setPower(.7);
 
             //While the motors and OpMode is running, return telemetry on the motors
             while (opModeIsActive() &&
@@ -940,10 +1149,9 @@ public class Auto_Red extends LinearOpMode {
 
         }
     }
-
-    public void encoderStrafeRight(double speed,
-                                   double leftInches, double rightInches,
-                                   double timeoutS) {
+    public void encoderStrafeRight ( double speed,
+                                     double leftInches, double rightInches,
+                                     double timeoutS){
         int newLeftTarget;//init the variable newLeftTarget
         int newRightTarget;//init the variable newRightTarget
 
@@ -966,10 +1174,10 @@ public class Auto_Red extends LinearOpMode {
 
             // reset the timeout time and start motion.
             runtime.reset();
-            leftFrontDrive.setPower(speed);
-            leftRearDrive.setPower(speed);
-            rightFrontDrive.setPower(speed);
-            rightRearDrive.setPower(speed);
+            leftFrontDrive.setPower(.75);
+            leftRearDrive.setPower(.7);
+            rightFrontDrive.setPower(.75);
+            rightRearDrive.setPower(.7);
 
 
             //While the motors and OpMode is running, return telemetry on the motors
