@@ -174,10 +174,10 @@ public class Motor_Test extends LinearOpMode{
 //                  rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                  rightRearDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                  leftFrontDrive.setPower(0.5);
-                  rightFrontDrive.setPower(0.5);
-                  rightRearDrive.setPower(0.5);
-                  leftRearDrive.setPower(0.5);
+                  leftFrontDrive.setPower(0.25);
+                  rightFrontDrive.setPower(0.25);
+                  rightRearDrive.setPower(0.25);
+                  leftRearDrive.setPower(0.25);
                   sleep(30000);
 //                  leftFrontDrive.setVelocity(0);
 //                  rightFrontDrive.setVelocity(0);

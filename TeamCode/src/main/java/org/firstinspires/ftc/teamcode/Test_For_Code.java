@@ -34,6 +34,8 @@ import java.util.Map;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -57,49 +59,56 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="PBR2_Tele", group="Iterative Opmode")
 
-public class Test_For_Code extends LinearOpMode{
+public class Test_For_Code extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor leftRearDrive = null;
     private DcMotor rightRearDrive = null;
-    private DcMotor rightIntake  = null;
+    private DcMotor rightIntake = null;
     private DcMotor leftIntake = null;
+    private DcMotor tapeMeasure = null;
     private DcMotor elevatorMotor = null;
-//    private CRServo elevatorServo = null;
+    //    private CRServo elevatorServo = null;
     private Servo blockRotationServo = null;
     private Servo stoneGripServo = null;
     private Servo leftFoundationServo = null;
     private Servo rightFoundationServo = null;
     private Servo SkystoneServo = null;
     private Servo SkystoneGrip = null;
+    private Servo capStoneLatch = null;
     private Servo rightSkystoneServo = null;
     private Servo leftSkystoneServo = null;
-//    private Servo leftSkystoneServo = null;
+    //    private Servo leftSkystoneServo = null;
 //    private Servo rightSkystoneServo = null;
     private Servo intake_Deployment = null;
+    DigitalChannel beamBreak;
+    boolean intakeLatch = false;
 
-    private static final double[] Latch = new double[]{0, 1, 2, 3, 4, 5, 6};
+    private static final double[] Latch = new double[]{0, 1, 2, 3, 4, 5, 6, 7};
     private int currentLatchIndex;
     private boolean upPressedLast;
     private boolean downPressedLast;
+    private String intakeDirection;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
         leftRearDrive = hardwareMap.get(DcMotor.class, "left_rear_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightRearDrive = hardwareMap.get(DcMotor.class, "right_rear_drive");
         leftIntake = hardwareMap.get(DcMotor.class, "left_intake");
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
         elevatorMotor = hardwareMap.get(DcMotor.class, "Elevator_Motor");
+        tapeMeasure = hardwareMap.get(DcMotor.class, "Tape_Measure_Motor");
         // elevatorServo = hardwareMap.get(CRServo.class, "Elevator_Servo");
         blockRotationServo = hardwareMap.get(Servo.class, "Stone_Rotation_Servo");
         stoneGripServo = hardwareMap.get(Servo.class, "Stone_Grip_Servo");
@@ -107,10 +116,12 @@ public class Test_For_Code extends LinearOpMode{
         leftFoundationServo = hardwareMap.get(Servo.class, "left_Foundation_Servo");
         rightFoundationServo = hardwareMap.get(Servo.class, "right_Foundation_Servo");
         SkystoneServo = hardwareMap.get(Servo.class, "skystone_Servo");
+        capStoneLatch = hardwareMap.get(Servo.class, "Capstone_Latch");
         rightSkystoneServo = hardwareMap.get(Servo.class, "right_Skystone_Servo");
-        leftSkystoneServo =  hardwareMap.get(Servo.class, "left_Skystone_Servo");
+        leftSkystoneServo = hardwareMap.get(Servo.class, "left_Skystone_Servo");
 //        leftSkystoneServo = hardwareMap.get(Servo.class, "left_Skystone_Servo");
 //        rightSkystoneServo = hardwareMap.get(Servo.class, "right_Skystone_Servo");
+        beamBreak = hardwareMap.get(DigitalChannel.class, "sensor_digital");
         intake_Deployment = hardwareMap.get(Servo.class, "intake_deployment");
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -138,205 +149,162 @@ public class Test_For_Code extends LinearOpMode{
         telemetry.update();
 
         waitForStart();
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             // Send calculated power to wheels
-//             elevatorMotor.setPower(-gamepad2.left_stick_y);
-
+            tapeMeasure.setPower(gamepad2.left_stick_y);
             final boolean upPressed = this.gamepad2.dpad_right;
             if (upPressed && !this.upPressedLast)
                 this.currentLatchIndex = (this.currentLatchIndex + 1) % Latch.length;
             this.upPressedLast = upPressed;
-
             final boolean downPressed = this.gamepad2.dpad_left;
             if (downPressed && !this.downPressedLast)
                 this.currentLatchIndex = (this.currentLatchIndex - 1) % Latch.length;
             this.downPressedLast = downPressed;
 
-            if(currentLatchIndex == 0){
+            if(currentLatchIndex == -1){
+                this.currentLatchIndex = 0;
+            }
+            if (currentLatchIndex == 0) {
                 elevatorMotor.setTargetPosition(0);
                 elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 elevatorMotor.setPower(0.75);
             }
-            if(currentLatchIndex == 1){
+            if (currentLatchIndex == 1) {
                 elevatorMotor.setTargetPosition(750);
                 elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 elevatorMotor.setPower(0.75);
             }
-            if(currentLatchIndex == 2){
+            if (currentLatchIndex == 2) {
                 elevatorMotor.setTargetPosition(1050);
                 elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 elevatorMotor.setPower(0.75);
             }
-            if(currentLatchIndex == 3){
+            if (currentLatchIndex == 3) {
                 elevatorMotor.setTargetPosition(1400);
                 elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 elevatorMotor.setPower(0.75);
             }
-            if(currentLatchIndex == 4){
+            if (currentLatchIndex == 4) {
                 elevatorMotor.setTargetPosition(1825);
                 elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 elevatorMotor.setPower(0.75);
             }
-            if(currentLatchIndex == 5){
+            if (currentLatchIndex == 5) {
                 elevatorMotor.setTargetPosition(2200);
                 elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 elevatorMotor.setPower(0.75);
             }
-            if(currentLatchIndex == 6){
+            if (currentLatchIndex == 6) {
                 elevatorMotor.setTargetPosition(2450);
                 elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 elevatorMotor.setPower(0.75);
             }
-            if(gamepad2.right_stick_button){
+            if(currentLatchIndex == 7){
+                this.currentLatchIndex = 6;
+            }
+            if (gamepad2.right_stick_button) {
                 elevatorMotor.setTargetPosition(0);
                 elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 elevatorMotor.setPower(0.5);
                 this.currentLatchIndex = 0;
             }
-//            if(gamepad2.dpad_down){
-//                elevatorMotor.setTargetPosition(1000);
-//                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                elevatorMotor.setPower(0.75);
-//            }
-//            if(gamepad2.dpad_up){
-//                elevatorMotor.setTargetPosition(10);
-//                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                elevatorMotor.setPower(0.75);
-//            }
-//            if(gamepad2.dpad_right){
-//                elevatorMotor.setTargetPosition(1800);
-//                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                elevatorMotor.setPower(0.75);
-//            }
-//            if(gamepad1.x){
-//                intake_Deployment.setPosition(0.75);
-//                sleep(1000);
-//                rightIntake.setPower(-0.15);
-//                leftIntake.setPower(-0.15);
-//                sleep(500);
-//                rightIntake.setPower(0.0);
-//                leftIntake.setPower(0.0);
-//                intake_Deployment.setPosition(0.4);
-//            }
-//            if(gamepad1.y){
-//                intake_Deployment.setPosition(0.40);
-//            }
-//            if(gamepad1.a){
-//                intake_Deployment.setPosition(0.75);
-//            }
-            if(gamepad2.left_bumper){
+            if (gamepad1.dpad_right) {
+                capStoneLatch.setPosition(0.59);
+            }
+            if (gamepad2.left_bumper) {
                 blockRotationServo.setPosition(0.15);
             }
-            if(gamepad2.right_bumper){
-                blockRotationServo.setPosition(0.885);
+            if (gamepad2.right_bumper) {
+                blockRotationServo.setPosition(0.875);
             }
-//            if(gamepad1.a){
-//                elevatorMotor.setTargetPosition(250);
-//                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                elevatorMotor.setPower(0.75);
-//            }
-//            if(gamepad1.b){
-//                elevatorMotor.setTargetPosition(10);
-//                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                elevatorMotor.setPower(0.75);
-//            }
-//            if(gamepad1.x){
-//                elevatorMotor.setTargetPosition(1100);
-//                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                elevatorMotor.setPower(0.75);
-//            }
-            if(gamepad1.x){//up
-//                SkystoneServo.setPosition(0.735);
-                rightSkystoneServo.setPosition(0.6);
-                leftSkystoneServo.setPosition(0.17);
+            if (gamepad1.x) {//up
+                intake_Deployment.setPosition(0.75);
+                sleep(500);
+                rightIntake.setPower(-0.15);
+                leftIntake.setPower(-0.15);
+                sleep(500);
+                rightIntake.setPower(0.0);
+                leftIntake.setPower(0.0);
+                intake_Deployment.setPosition(0.4);
+                intakeLatch = true;
             }
-            if (gamepad1.b){//down
-//                SkystoneServo.setPosition(0.3);
-                rightSkystoneServo.setPosition(0.17);
-                leftSkystoneServo.setPosition(0.6);
-            }
-            if(gamepad1.y){
+//            if (gamepad1.b) {//down
+//                rightSkystoneServo.setPosition(0.17);
+//                leftSkystoneServo.setPosition(0.6);
+//            }
+            if (gamepad1.y) {
                 SkystoneGrip.setPosition(0.95);
             }
-            if(gamepad1.a){//closed
+            if (gamepad1.a) {//closed
                 SkystoneGrip.setPosition(0.5);
             }
-            if(gamepad2.dpad_down){
-//                elevatorMotor.setTargetPosition(0);
-//                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                elevatorMotor.setPower(1.0);
+            if (gamepad2.dpad_down || beamBreak.getState() == false && intakeLatch == true) {
                 stoneGripServo.setPosition(0.63);
-//                sleep(500);
             }
-            if(gamepad1.right_bumper){
-//                elevatorMotor.setTargetPosition(0);
-//                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                elevatorMotor.setPower(1.0);
-                stoneGripServo.setPosition(0.65);
-//                sleep(500);
+            if (gamepad1.right_bumper) {
+                capStoneLatch.setPosition(0.75);
             }
-            if(gamepad1.left_bumper){
-                stoneGripServo.setPosition(0.2);
+            if (gamepad1.left_bumper) {
+                stoneGripServo.setPosition(0.3);
             }
-//            if(gamepad1.right_bumper){
-//                blockRotationServo.setPosition(0.5);
-//            }
-//            if(gamepad2.x){
-//                SkystoneServo.setPosition(0.95);
-//            }
-//            if(gamepad2.b){
-//                SkystoneServo.setPosition(0.35);
-//            }
-            if(gamepad1.left_stick_x < -0.2 && gamepad1.right_stick_x < -0.2){
+            if (gamepad1.left_stick_x < -0.2 && gamepad1.right_stick_x < -0.2) {
                 leftFrontDrive.setPower(-0.55);
                 leftRearDrive.setPower(0.5);
                 rightFrontDrive.setPower(0.55);
                 rightRearDrive.setPower(-0.5);
-            }else if(gamepad1.left_stick_x > 0.2 && gamepad1.right_stick_x > 0.2){
+            } else if (gamepad1.left_stick_x > 0.2 && gamepad1.right_stick_x > 0.2) {
                 leftFrontDrive.setPower(0.55);
                 leftRearDrive.setPower(-0.5);
                 rightFrontDrive.setPower(-0.55);
                 rightRearDrive.setPower(0.5);
-            }else if(gamepad1.left_trigger > 0.2) {
+            } else if (gamepad1.left_trigger > 0.2) {
                 leftFrontDrive.setPower(0.55);
                 leftRearDrive.setPower(0.55);
                 rightFrontDrive.setPower(0.30);
                 rightRearDrive.setPower(0.30);
-            }else if(gamepad1.right_trigger > 0.2) {
+            } else if (gamepad1.right_trigger > 0.2) {
                 leftFrontDrive.setPower(0.30);
                 leftRearDrive.setPower(0.30);
                 rightFrontDrive.setPower(0.55);
                 rightRearDrive.setPower(0.55);
-            }
-            else{
+            } else {
                 leftFrontDrive.setPower(-gamepad1.left_stick_y * .65);
                 leftRearDrive.setPower(-gamepad1.left_stick_y * .65);
                 rightFrontDrive.setPower(-gamepad1.right_stick_y * .65);
-                rightRearDrive.setPower(-gamepad1.right_stick_y *.65);
+                rightRearDrive.setPower(-gamepad1.right_stick_y * .65);
             }
-            if(gamepad2.a){
-                rightIntake.setPower(0.35);
-                leftIntake.setPower(0.35);
+            if (gamepad2.a && this.currentLatchIndex == 0) {
+                rightIntake.setPower(0.55);
+                leftIntake.setPower(0.55);
+                intakeDirection = "In";
             }
-            if(gamepad2.b){
+            if (gamepad2.b) {
                 rightIntake.setPower(-0.25);
                 leftIntake.setPower(-0.25);
+                intakeDirection = "Out";
             }
-            if(gamepad2.x){
+            if (gamepad2.x) {
                 rightIntake.setPower(0.0);
                 leftIntake.setPower(0.0);
+                intakeDirection = "Off";
             }
-            if(gamepad1.dpad_down){
+            if (gamepad1.dpad_down) {
+                leftFoundationServo.setPosition(0.15);
+                rightFoundationServo.setPosition(0.86);
+            }
+            if (gamepad1.dpad_up) {
                 leftFoundationServo.setPosition(0.535);
                 rightFoundationServo.setPosition(0.45);
             }
-            if(gamepad1.dpad_up){
-                leftFoundationServo.setPosition(0.15);
-                rightFoundationServo.setPosition(0.85);
+            if (beamBreak.getState() == true) {
+                telemetry.addData("Beam: ", "Not Latched");
+            } else {
+                telemetry.addData("Beam: ", "Latched");
             }
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Elevator Position: ", currentLatchIndex);
+            telemetry.addData("Intake Direction ", intakeDirection);
             telemetry.addData("Elevator Encoder: ", elevatorMotor.getCurrentPosition());
             telemetry.addLine("Position: " + elevatorMotor.getCurrentPosition());
             telemetry.update();
@@ -346,4 +314,3 @@ public class Test_For_Code extends LinearOpMode{
          */
     }
 }
-

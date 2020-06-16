@@ -32,7 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /*
  * This is an example LinearOpMode that shows how to use
@@ -55,16 +57,17 @@ public class SensorDigitalTouch extends LinearOpMode {
      * Expansion Hub using a 4-wire JST cable, the second pin gets connected to the Touch Sensor.
      * The lower (first) pin stays unconnected.*
      */
-
+//    AnalogInput analogInput;
     DigitalChannel digitalTouch;  // Hardware Device Object
+    private Servo stoneGripServo = null;
 
     @Override
     public void runOpMode() {
 
         // get a reference to our digitalTouch object.
         digitalTouch = hardwareMap.get(DigitalChannel.class, "sensor_digital");
-
-        // set the digital channel to input.
+        stoneGripServo = hardwareMap.get(Servo.class, "Stone_Grip_Servo");
+//        analogInput = hardwareMap.get(AnalogInput.class, "sensor_analog");        // set the digital channel to input.
         digitalTouch.setMode(DigitalChannel.Mode.INPUT);
 
         // wait for the start button to be pressed.
@@ -73,12 +76,13 @@ public class SensorDigitalTouch extends LinearOpMode {
         // while the op mode is active, loop and read the light levels.
         // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
         while (opModeIsActive()) {
-
             // send the info back to driver station using telemetry function.
             // if the digital channel returns true it's HIGH and the button is unpressed.
             if (digitalTouch.getState() == true) {
+                stoneGripServo.setPosition(0.3);
                 telemetry.addData("Digital Touch", "Is Not Pressed");
             } else {
+                stoneGripServo.setPosition(0.63);
                 telemetry.addData("Digital Touch", "Is Pressed");
             }
 
